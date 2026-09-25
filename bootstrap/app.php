@@ -12,7 +12,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Railway (and most PaaS hosts) terminate TLS at their edge and proxy
+        // plain HTTP to the container, so trust that proxy to read the
+        // X-Forwarded-Proto header -- otherwise Laravel thinks every request
+        // is insecure HTTP and generates http:// form/asset URLs even though
+        // the page itself was loaded over https, which triggers the browser's
+        // "not secure" submission warning.
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

@@ -16,6 +16,25 @@ class GameController extends Controller
         return view('welcome');
     }
 
+    public function joinForm(string $code)
+    {
+        $game = Game::where('code', strtoupper($code))->first();
+
+        if (! $game) {
+            return redirect()->route('home')->withErrors(['code' => 'No game found with that code.']);
+        }
+
+        if ($this->currentPlayer($game)) {
+            return redirect()->route('games.show', $game->code);
+        }
+
+        if ($game->status !== 'lobby') {
+            return redirect()->route('home')->withErrors(['code' => 'That game has already started.']);
+        }
+
+        return view('join', ['game' => $game]);
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([

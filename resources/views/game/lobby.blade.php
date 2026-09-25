@@ -5,9 +5,22 @@
 @section('content')
     <div class="text-center mb-6">
         <h1 class="text-2xl font-bold">Waiting in the lobby&hellip;</h1>
-        <p class="text-slate-400 text-sm mt-1">Share the room code with your friends so they can join.</p>
+        <p class="text-slate-400 text-sm mt-1">Share the invite link (or the room code) with your friends.</p>
         <div class="mt-3 inline-block font-mono text-3xl tracking-[0.4em] bg-slate-800 border border-slate-600 rounded-xl px-6 py-3 text-amber-400">
             {{ $game->code }}
+        </div>
+
+        <div class="mt-4 max-w-md mx-auto">
+            <div class="flex items-stretch gap-2">
+                <input id="invite-link" type="text" readonly
+                       value="{{ route('games.joinForm', $game->code) }}"
+                       class="flex-1 min-w-0 rounded-lg bg-slate-800 border border-slate-600 px-3 py-2 text-sm text-slate-300 truncate">
+                <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('invite-link').value).then(() => { this.innerText = 'Copied!'; setTimeout(() => this.innerText = 'Copy', 1500); })"
+                        class="shrink-0 rounded-lg bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-semibold px-4 py-2 text-sm transition">
+                    Copy
+                </button>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">Friends who open this link only need to type their name.</p>
         </div>
     </div>
 
