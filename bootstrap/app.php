@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ForceHttps;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -19,6 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
         // the page itself was loaded over https, which triggers the browser's
         // "not secure" submission warning.
         $middleware->trustProxies(at: '*');
+
+        // Railway's edge accepts plain HTTP without upgrading it, so also
+        // actively redirect any genuinely insecure request to HTTPS.
+        $middleware->prepend(ForceHttps::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
