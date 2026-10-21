@@ -1,20 +1,16 @@
 <?php
 
-use App\Http\Controllers\GameController;
+use App\Http\Controllers\MafiaController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [GameController::class, 'index'])->name('home');
-Route::get('/join/{code}', [GameController::class, 'joinForm'])->name('games.joinForm');
+Route::get('/', [MafiaController::class, 'index'])->name('home');
+Route::get('/mafia/new', [MafiaController::class, 'create'])->name('mafia.create');
+Route::post('/mafia', [MafiaController::class, 'store'])->name('mafia.store');
 
-Route::post('/games', [GameController::class, 'store'])->name('games.store');
-Route::post('/games/join', [GameController::class, 'join'])->name('games.join');
-
-Route::get('/g/{code}', [GameController::class, 'show'])->name('games.show');
-Route::get('/g/{code}/status', [GameController::class, 'status'])->name('games.status');
-Route::post('/g/{code}/start', [GameController::class, 'start'])->name('games.start');
-Route::post('/g/{code}/night-action', [GameController::class, 'nightAction'])->name('games.nightAction');
-Route::post('/g/{code}/vote', [GameController::class, 'vote'])->name('games.vote');
-Route::post('/g/{code}/resolve-night', [GameController::class, 'resolveNight'])->name('games.resolveNight');
-Route::post('/g/{code}/resolve-day', [GameController::class, 'resolveDay'])->name('games.resolveDay');
-Route::post('/g/{code}/reset', [GameController::class, 'reset'])->name('games.reset');
-Route::post('/g/{code}/leave', [GameController::class, 'leave'])->name('games.leave');
+Route::get('/mafia/{game}', [MafiaController::class, 'show'])->name('mafia.show');
+Route::post('/mafia/{game}/vote', [MafiaController::class, 'vote'])->name('mafia.vote');
+Route::post('/mafia/{game}/reset-votes', [MafiaController::class, 'resetVotes'])->name('mafia.resetVotes');
+Route::post('/mafia/{game}/eliminate', [MafiaController::class, 'eliminate'])->name('mafia.eliminate');
+Route::post('/mafia/{game}/undo', [MafiaController::class, 'undo'])->name('mafia.undo');
+Route::post('/mafia/{game}/end', [MafiaController::class, 'end'])->name('mafia.end');
+Route::post('/mafia/{game}/restart', [MafiaController::class, 'restart'])->name('mafia.restart');
